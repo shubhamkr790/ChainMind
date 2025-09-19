@@ -1,0 +1,40 @@
+{
+  "name": "chainmind-smart-contracts",
+  "version": "1.0.0",
+  "description": "ChainMind Smart Contracts - Decentralized AI Compute Marketplace",
+  "main": "index.js",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy:local": "hardhat run scripts/deploy.ts --network localhost",
+    "deploy:mumbai": "hardhat run scripts/deploy.ts --network mumbai",
+    "deploy:polygon": "hardhat run scripts/deploy.ts --network polygon",
+    "verify:mumbai": "hardhat verify --network mumbai",
+    "verify:polygon": "hardhat verify --network polygon",
+    "node": "hardhat node",
+    "coverage": "hardhat coverage",
+    "size": "hardhat size-contracts",
+    "typecheck": "echo \"No TypeScript in contracts\" && exit 0"
+  },
+  "keywords": [
+    "blockchain",
+    "smart-contracts",
+    "solidity",
+    "hardhat",
+    "ethereum",
+    "polygon"
+  ],
+  "author": "ChainMind Team",
+  "license": "MIT",
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.4.0",
+    "@openzeppelin/contracts-upgradeable": "^5.4.0",
+    "dotenv": "^16.6.1"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@typechain/ethers-v6": "^0.5.1",
+    "@typechain/hardhat": "^9.1.0",
+    "hardhat": "^2.26.3"
+  }
+}
