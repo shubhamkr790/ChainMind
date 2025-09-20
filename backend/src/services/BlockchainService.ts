@@ -120,7 +120,7 @@ export class BlockchainService {
       
       logger.info(`Creating escrow for job ${jobId}, amount: ${amountInPOL} POL`);
       
-      const tx = await this.escrowContract.createEscrow(
+      const tx = await this.escrowContract!.createEscrow(
         jobId,
         providerAddress,
         amount,
@@ -132,7 +132,7 @@ export class BlockchainService {
       // Parse the EscrowCreated event to get escrow ID
       const escrowCreatedEvent = receipt.logs.find((log: any) => {
         try {
-          const parsed = this.escrowContract.interface.parseLog(log);
+          const parsed = this.escrowContract!.interface.parseLog(log);
           return parsed?.name === 'EscrowCreated';
         } catch {
           return false;
@@ -141,7 +141,7 @@ export class BlockchainService {
 
       let escrowId: number | undefined;
       if (escrowCreatedEvent) {
-        const parsed = this.escrowContract.interface.parseLog(escrowCreatedEvent);
+        const parsed = this.escrowContract!.interface.parseLog(escrowCreatedEvent);
         escrowId = Number(parsed?.args.escrowId);
       }
 
@@ -172,7 +172,7 @@ export class BlockchainService {
     try {
       logger.info(`Releasing escrow ${escrowId}`);
       
-      const tx = await this.escrowContract.releaseEscrow(escrowId);
+      const tx = await this.escrowContract!.releaseEscrow(escrowId);
       await tx.wait();
       
       logger.info(`Escrow ${escrowId} released successfully. TX: ${tx.hash}`);
@@ -201,7 +201,7 @@ export class BlockchainService {
     try {
       logger.info(`Refunding escrow ${escrowId}`);
       
-      const tx = await this.escrowContract.refundEscrow(escrowId);
+      const tx = await this.escrowContract!.refundEscrow(escrowId);
       await tx.wait();
       
       logger.info(`Escrow ${escrowId} refunded successfully. TX: ${tx.hash}`);
@@ -224,7 +224,7 @@ export class BlockchainService {
    */
   async getEscrow(escrowId: number): Promise<EscrowData | null> {
     try {
-      const escrowData = await this.escrowContract.getEscrow(escrowId);
+      const escrowData = await this.escrowContract!.getEscrow(escrowId);
       
       return {
         id: Number(escrowData.id),
@@ -257,7 +257,7 @@ export class BlockchainService {
     try {
       logger.info(`Submitting rating for provider ${providerAddress}, job ${jobId}, rating: ${rating}`);
       
-      const tx = await this.reputationContract.submitRating(
+      const tx = await this.reputationContract!.submitRating(
         providerAddress,
         jobId,
         rating,
@@ -285,7 +285,7 @@ export class BlockchainService {
    */
   async getProviderReputation(providerAddress: string): Promise<ReputationData | null> {
     try {
-      const reputation = await this.reputationContract.getProviderReputation(providerAddress);
+      const reputation = await this.reputationContract!.getProviderReputation(providerAddress);
       
       return {
         totalRatings: Number(reputation.totalRatings),
@@ -304,7 +304,7 @@ export class BlockchainService {
    */
   async getCMTBalance(address: string): Promise<string | null> {
     try {
-      const balance = await this.cmtTokenContract.balanceOf(address);
+      const balance = await this.cmtTokenContract!.balanceOf(address);
       return ethers.formatEther(balance);
     } catch (error: any) {
       logger.error(`Failed to get CMT balance for ${address}:`, error);
@@ -328,7 +328,7 @@ export class BlockchainService {
       
       logger.info(`Transferring ${amount} CMT to ${toAddress}`);
       
-      const tx = await this.cmtTokenContract.transfer(toAddress, amountWei);
+      const tx = await this.cmtTokenContract!.transfer(toAddress, amountWei);
       await tx.wait();
       
       logger.info(`CMT transfer successful. TX: ${tx.hash}`);
@@ -351,7 +351,7 @@ export class BlockchainService {
    */
   async getTransactionReceipt(txHash: string) {
     try {
-      return await this.provider.getTransactionReceipt(txHash);
+      return await this.provider!.getTransactionReceipt(txHash);
     } catch (error: any) {
       logger.error(`Failed to get transaction receipt for ${txHash}:`, error);
       return null;
@@ -363,7 +363,7 @@ export class BlockchainService {
    */
   async getGasPrice(): Promise<string | null> {
     try {
-      const gasPrice = await this.provider.getFeeData();
+      const gasPrice = await this.provider!.getFeeData();
       return gasPrice.gasPrice?.toString() || null;
     } catch (error: any) {
       logger.error('Failed to get gas price:', error);
