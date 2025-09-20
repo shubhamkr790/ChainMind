@@ -15,7 +15,7 @@ This comprehensive guide will walk you through every aspect of using ChainMind, 
 ### 🔗 Account Setup
 
 #### 1. Connect Your Wallet
-1. Visit [chainmind.ai](https://chainmind.ai)
+1. Visit [chainmind](https://chainmind.up.railway.app/)
 2. Click **"Connect Wallet"** in the top-right corner
 3. Select your preferred wallet (MetaMask recommended)
 4. Approve the connection request
