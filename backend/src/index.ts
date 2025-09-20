@@ -241,8 +241,8 @@ class ChainMindServer {
       // Connect to database
       await database.connect();
 
-      // Start server
-      this.server.listen(this.port, () => {
+      // Start server - bind to 0.0.0.0 for Railway
+      this.server.listen(this.port, '0.0.0.0', () => {
         logger.info(`
 🚀 ChainMind Server Started Successfully!
 🌐 Environment: ${process.env.NODE_ENV || 'development'}
