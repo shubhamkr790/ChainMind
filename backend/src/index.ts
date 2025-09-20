@@ -114,6 +114,34 @@ class ChainMindServer {
       });
     });
 
+    // Debug route for Railway
+    this.app.get('/debug', (req, res) => {
+      res.status(200).json({
+        status: 'Server is running',
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime(),
+        environment: process.env.NODE_ENV || 'development',
+        port: this.port,
+        mongoUri: process.env.MONGODB_URI ? 'configured' : 'not configured',
+        database: database.isConnectedToDatabase() ? 'connected' : 'disconnected',
+        version: process.env.API_VERSION || 'v1'
+      });
+    });
+
+    // Debug route for Railway
+    this.app.get('/debug', (req, res) => {
+      res.status(200).json({
+        status: 'Server is running',
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime(),
+        environment: process.env.NODE_ENV || 'development',
+        port: this.port,
+        mongoUri: process.env.MONGODB_URI ? 'configured' : 'not configured',
+        database: database.isConnectedToDatabase() ? 'connected' : 'disconnected',
+        version: process.env.API_VERSION || 'v1'
+      });
+    });
+
     // API routes
     const apiVersion = process.env.API_VERSION || 'v1';
     
@@ -238,8 +266,23 @@ class ChainMindServer {
 
   public async start(): Promise<void> {
     try {
-      // Connect to database
-      await database.connect();
+      console.log('Starting ChainMind server...');
+      console.log(`Environment: ${process.env.NODE_ENV}`);
+      console.log(`Port: ${this.port}`);
+      console.log(`MongoDB URI: ${process.env.MONGODB_URI ? 'Set' : 'Not set'}`);
+      
+      logger.info('Starting ChainMind server...');
+      logger.info(`Environment: ${process.env.NODE_ENV}`);
+      logger.info(`Port: ${this.port}`);
+      logger.info(`MongoDB URI: ${process.env.MONGODB_URI ? 'Set' : 'Not set'}`);
+      
+      // Connect to database (non-blocking)
+      try {
+        await database.connect();
+        logger.info('Database connection successful');
+      } catch (dbError) {
+        logger.warn('Database connection failed, continuing without database:', dbError);
+      }
 
       // Start server - bind to 0.0.0.0 for Railway
       this.server.listen(this.port, '0.0.0.0', () => {
@@ -249,9 +292,18 @@ class ChainMindServer {
 🔗 Port: ${this.port}
 📡 API Version: ${process.env.API_VERSION || 'v1'}
 🗄️  Database: ${database.isConnectedToDatabase() ? '✅ Connected' : '❌ Disconnected'}
-🌍 Access: http://localhost:${this.port}
-📖 Health: http://localhost:${this.port}/health
+🌍 Access: http://0.0.0.0:${this.port}
+📖 Health: http://0.0.0.0:${this.port}/health
+🔍 Debug: http://0.0.0.0:${this.port}/debug
         `);
+      });
+      
+      // Handle server errors
+      this.server.on('error', (error: any) => {
+        logger.error('Server error:', error);
+        if (error.code === 'EADDRINUSE') {
+          logger.error(`Port ${this.port} is already in use`);
+        }
       });
 
       // Make io available globally for routes
