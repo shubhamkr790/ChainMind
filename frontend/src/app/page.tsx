@@ -293,7 +293,7 @@ function HomePage() {
           >
             <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
               <div className="flex items-center space-x-6 text-sm text-gray-500">
-                <span>© 2024 ChainMind</span>
+                <span>© 2025 ChainMind</span>
                 <span className="hidden md:block text-gray-700">•</span>
                 <a href="#" className="hover:text-gray-300 transition-colors">Privacy</a>
                 <span className="hidden md:block text-gray-700">•</span>
