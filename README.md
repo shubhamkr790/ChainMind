@@ -382,7 +382,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🔗 Links
 
-- **Website**: [chainmind.ai](https://chainmind.up.railway.app/)
+- **Website**: [chainmind](https://chainmind.up.railway.app/)
 - **Documentation**: [docs.chainmind](https://)
 - **Discord**: [Join our community](https://discord.gg/)
 - **Twitter**: [@ChainMindAI](https://twitter.com/)
