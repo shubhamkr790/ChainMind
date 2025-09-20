@@ -233,7 +233,7 @@ router.get('/:jobId', /* authenticate, */ [param('jobId').isMongoId()], async (r
 });
 
 // PUT /api/v1/jobs/:jobId - Update job
-router.put('/:jobId', authenticate, validateJobUpdate, async (req: Request, res: Response) => {
+router.put('/:jobId', /* authenticate, */ validateJobUpdate, async (req: Request, res: Response) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -244,8 +244,8 @@ router.put('/:jobId', authenticate, validateJobUpdate, async (req: Request, res:
       });
     }
 
-    const authReq = req as unknown as AuthenticatedRequest;
-    const userId = authReq.user?.id;
+    // const authReq = req as unknown as AuthenticatedRequest;
+    const userId = '674d8b8f5e1a2b3c4d5e6f78'; // Mock user ID for development
     const job = await TrainingJob.findById(req.params.jobId);
 
     if (!job) {
@@ -288,7 +288,7 @@ router.put('/:jobId', authenticate, validateJobUpdate, async (req: Request, res:
 });
 
 // POST /api/v1/jobs/:jobId/publish - Publish job to marketplace
-router.post('/:jobId/publish', authenticate, [param('jobId').isMongoId()], async (req: Request, res: Response) => {
+router.post('/:jobId/publish', /* authenticate, */ [param('jobId').isMongoId()], async (req: Request, res: Response) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -298,8 +298,8 @@ router.post('/:jobId/publish', authenticate, [param('jobId').isMongoId()], async
       });
     }
 
-    const authReq = req as unknown as AuthenticatedRequest;
-    const userId = authReq.user?.id;
+    // const authReq = req as unknown as AuthenticatedRequest;
+    const userId = '674d8b8f5e1a2b3c4d5e6f78'; // Mock user ID for development
     const job = await TrainingJob.findById(req.params.jobId);
 
     if (!job) {
@@ -347,7 +347,7 @@ router.post('/:jobId/publish', authenticate, [param('jobId').isMongoId()], async
 });
 
 // POST /api/v1/jobs/:jobId/accept - Provider accepts a job
-router.post('/:jobId/accept', authenticate, [param('jobId').isMongoId()], async (req: Request, res: Response) => {
+router.post('/:jobId/accept', /* authenticate, */ [param('jobId').isMongoId()], async (req: Request, res: Response) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -357,9 +357,9 @@ router.post('/:jobId/accept', authenticate, [param('jobId').isMongoId()], async 
       });
     }
 
-    const authReq = req as unknown as AuthenticatedRequest;
-    const userId = authReq.user?.id;
-    const walletAddress = authReq.user?.walletAddress;
+    // const authReq = req as unknown as AuthenticatedRequest;
+    const userId = '674d8b8f5e1a2b3c4d5e6f78'; // Mock user ID for development
+    const walletAddress = '0x742d35Cc6634C0532925a3b8D0A04D5F9F123456'; // Mock wallet
 
     // Find the job
     const job = await TrainingJob.findById(req.params.jobId);
@@ -434,10 +434,10 @@ router.post('/:jobId/accept', authenticate, [param('jobId').isMongoId()], async 
 });
 
 // POST /api/v1/jobs/:jobId/start - Start job execution
-router.post('/:jobId/start', authenticate, [param('jobId').isMongoId()], async (req: Request, res: Response) => {
+router.post('/:jobId/start', /* authenticate, */ [param('jobId').isMongoId()], async (req: Request, res: Response) => {
   try {
-    const authReq = req as unknown as AuthenticatedRequest;
-    const userId = authReq.user?.id;
+    // const authReq = req as unknown as AuthenticatedRequest;
+    const userId = '674d8b8f5e1a2b3c4d5e6f78'; // Mock user ID for development
     const job = await TrainingJob.findById(req.params.jobId);
 
     if (!job) {
@@ -488,7 +488,7 @@ router.post('/:jobId/start', authenticate, [param('jobId').isMongoId()], async (
 });
 
 // PUT /api/v1/jobs/:jobId/progress - Update job progress
-router.put('/:jobId/progress', authenticate, [
+router.put('/:jobId/progress', /* authenticate, */ [
   param('jobId').isMongoId(),
   body('percentage').isInt({ min: 0, max: 100 }),
 ], async (req: Request, res: Response) => {
@@ -502,8 +502,8 @@ router.put('/:jobId/progress', authenticate, [
       });
     }
 
-    const authReq = req as unknown as AuthenticatedRequest;
-    const userId = authReq.user?.id;
+    // const authReq = req as unknown as AuthenticatedRequest;
+    const userId = '674d8b8f5e1a2b3c4d5e6f78'; // Mock user ID for development
     const job = await TrainingJob.findById(req.params.jobId);
 
     if (!job) {
@@ -550,10 +550,10 @@ router.put('/:jobId/progress', authenticate, [
 });
 
 // POST /api/v1/jobs/:jobId/complete - Complete job
-router.post('/:jobId/complete', authenticate, [param('jobId').isMongoId()], async (req: Request, res: Response) => {
+router.post('/:jobId/complete', /* authenticate, */ [param('jobId').isMongoId()], async (req: Request, res: Response) => {
   try {
-    const authReq = req as unknown as AuthenticatedRequest;
-    const userId = authReq.user?.id;
+    // const authReq = req as unknown as AuthenticatedRequest;
+    const userId = '674d8b8f5e1a2b3c4d5e6f78'; // Mock user ID for development
     const job = await TrainingJob.findById(req.params.jobId);
 
     if (!job) {
@@ -608,10 +608,10 @@ router.post('/:jobId/complete', authenticate, [param('jobId').isMongoId()], asyn
 });
 
 // GET /api/v1/jobs/my/client - Get jobs where user is the client
-router.get('/my/client', authenticate, async (req: Request, res: Response) => {
+router.get('/my/client', /* authenticate, */ async (req: Request, res: Response) => {
   try {
-    const authReq = req as unknown as AuthenticatedRequest;
-    const userId = authReq.user?.id;
+    // const authReq = req as unknown as AuthenticatedRequest;
+    const userId = '674d8b8f5e1a2b3c4d5e6f78'; // Mock user ID for development
     const { status, page = 1, limit = 20 } = req.query;
 
     const filter: any = { clientId: new mongoose.Types.ObjectId(userId) };
@@ -654,10 +654,10 @@ router.get('/my/client', authenticate, async (req: Request, res: Response) => {
 });
 
 // GET /api/v1/jobs/my/provider - Get jobs where user is the provider
-router.get('/my/provider', authenticate, async (req: Request, res: Response) => {
+router.get('/my/provider', /* authenticate, */ async (req: Request, res: Response) => {
   try {
-    const authReq = req as unknown as AuthenticatedRequest;
-    const userId = authReq.user?.id;
+    // const authReq = req as unknown as AuthenticatedRequest;
+    const userId = '674d8b8f5e1a2b3c4d5e6f78'; // Mock user ID for development
     const { status, page = 1, limit = 20 } = req.query;
 
     const filter: any = { providerId: new mongoose.Types.ObjectId(userId) };
