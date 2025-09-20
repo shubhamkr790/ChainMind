@@ -45,44 +45,58 @@ export interface ReputationData {
 }
 
 export class BlockchainService {
-  private provider: ethers.JsonRpcProvider;
-  private wallet: Wallet | HDNodeWallet;
-  private escrowContract: Contract;
-  private reputationContract: Contract;
-  private cmtTokenContract: Contract;
+  private provider?: ethers.JsonRpcProvider;
+  private wallet?: Wallet | HDNodeWallet;
+  private escrowContract?: Contract;
+  private reputationContract?: Contract;
+  private cmtTokenContract?: Contract;
+  private isConfigured: boolean = false;
 
   constructor() {
-    // Initialize provider
-    this.provider = new ethers.JsonRpcProvider(process.env.RPC_URL);
-    
-    // Initialize wallet (backend wallet for contract interactions)
-    if (!process.env.BACKEND_PRIVATE_KEY || process.env.BACKEND_PRIVATE_KEY === 'your_backend_private_key_here') {
-      logger.warn('Backend private key not configured. Contract interactions will be limited.');
-      this.wallet = Wallet.createRandom().connect(this.provider);
-    } else {
-      this.wallet = new Wallet(process.env.BACKEND_PRIVATE_KEY, this.provider);
+    try {
+      // Check if blockchain configuration is available
+      if (!process.env.RPC_URL || !process.env.ESCROW_CONTRACT_ADDRESS || !process.env.REPUTATION_CONTRACT_ADDRESS || !process.env.CMT_TOKEN_CONTRACT_ADDRESS) {
+        logger.warn('Blockchain configuration incomplete. Blockchain features will be disabled.');
+        logger.warn('Missing: RPC_URL, ESCROW_CONTRACT_ADDRESS, REPUTATION_CONTRACT_ADDRESS, or CMT_TOKEN_CONTRACT_ADDRESS');
+        return;
+      }
+
+      // Initialize provider
+      this.provider = new ethers.JsonRpcProvider(process.env.RPC_URL);
+      
+      // Initialize wallet (backend wallet for contract interactions)
+      if (!process.env.BACKEND_PRIVATE_KEY || process.env.BACKEND_PRIVATE_KEY === 'your_backend_private_key_here') {
+        logger.warn('Backend private key not configured. Contract interactions will be limited.');
+        this.wallet = Wallet.createRandom().connect(this.provider);
+      } else {
+        this.wallet = new Wallet(process.env.BACKEND_PRIVATE_KEY, this.provider);
+      }
+
+      // Initialize contracts
+      this.escrowContract = new Contract(
+        process.env.ESCROW_CONTRACT_ADDRESS,
+        ESCROW_ABI,
+        this.wallet
+      );
+
+      this.reputationContract = new Contract(
+        process.env.REPUTATION_CONTRACT_ADDRESS,
+        REPUTATION_ABI,
+        this.wallet
+      );
+
+      this.cmtTokenContract = new Contract(
+        process.env.CMT_TOKEN_CONTRACT_ADDRESS,
+        CMT_TOKEN_ABI,
+        this.wallet
+      );
+
+      this.isConfigured = true;
+      logger.info('Blockchain service initialized successfully');
+    } catch (error) {
+      logger.error('Failed to initialize blockchain service:', error);
+      logger.warn('Blockchain features will be disabled.');
     }
-
-    // Initialize contracts
-    this.escrowContract = new Contract(
-      process.env.ESCROW_CONTRACT_ADDRESS!,
-      ESCROW_ABI,
-      this.wallet
-    );
-
-    this.reputationContract = new Contract(
-      process.env.REPUTATION_CONTRACT_ADDRESS!,
-      REPUTATION_ABI,
-      this.wallet
-    );
-
-    this.cmtTokenContract = new Contract(
-      process.env.CMT_TOKEN_CONTRACT_ADDRESS!,
-      CMT_TOKEN_ABI,
-      this.wallet
-    );
-
-    logger.info('Blockchain service initialized successfully');
   }
 
   /**
@@ -94,6 +108,13 @@ export class BlockchainService {
     transactionHash?: string;
     error?: string;
   }> {
+    if (!this.isConfigured || !this.escrowContract) {
+      return {
+        success: false,
+        error: 'Blockchain service not configured. Please set required environment variables.'
+      };
+    }
+
     try {
       const amount = ethers.parseEther(amountInPOL.toString());
       
