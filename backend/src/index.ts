@@ -92,11 +92,7 @@ class ChainMindServer {
     }
     this.app.use('/uploads', express.static(uploadDir));
 
-    // Create logs directory if it doesn't exist
-    const logsDir = path.join(process.cwd(), 'logs');
-    if (!fs.existsSync(logsDir)) {
-      fs.mkdirSync(logsDir, { recursive: true });
-    }
+    // Logs directory creation moved to logger (development only)
 
     logger.info('Middlewares initialized successfully');
   }

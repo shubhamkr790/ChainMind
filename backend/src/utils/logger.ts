@@ -31,7 +31,7 @@ const format = winston.format.combine(
   ),
 );
 
-// Define log transports
+// Define log transports (Railway-friendly - console only)
 const transports = [
   // Console transport
   new winston.transports.Console({
@@ -41,27 +41,34 @@ const transports = [
         ({ timestamp, level, message }: any) => `${timestamp} [${level}]: ${message}`
       )
     )
-  }),
-  
-  // File transport for errors
-  new winston.transports.File({
-    filename: path.join(process.cwd(), 'logs', 'error.log'),
-    level: 'error',
-    format: winston.format.combine(
-      winston.format.timestamp(),
-      winston.format.json()
-    )
-  }),
-  
-  // File transport for all logs
-  new winston.transports.File({
-    filename: path.join(process.cwd(), 'logs', 'combined.log'),
-    format: winston.format.combine(
-      winston.format.timestamp(),
-      winston.format.json()
-    )
-  }),
+  })
 ];
+
+// Only add file transports in development
+if (process.env.NODE_ENV === 'development') {
+  try {
+    // File transport for errors
+    transports.push(new winston.transports.File({
+      filename: path.join(process.cwd(), 'logs', 'error.log'),
+      level: 'error',
+      format: winston.format.combine(
+        winston.format.timestamp(),
+        winston.format.json()
+      )
+    }));
+    
+    // File transport for all logs
+    transports.push(new winston.transports.File({
+      filename: path.join(process.cwd(), 'logs', 'combined.log'),
+      format: winston.format.combine(
+        winston.format.timestamp(),
+        winston.format.json()
+      )
+    }));
+  } catch (error) {
+    console.warn('Could not create file transports:', error);
+  }
+}
 
 // Create logger instance
 const logger = winston.createLogger({
