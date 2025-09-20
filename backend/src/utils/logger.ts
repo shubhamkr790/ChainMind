@@ -32,7 +32,7 @@ const format = winston.format.combine(
 );
 
 // Define log transports (Railway-friendly - console only)
-const transports = [
+const transports: winston.transport[] = [
   // Console transport
   new winston.transports.Console({
     format: winston.format.combine(
