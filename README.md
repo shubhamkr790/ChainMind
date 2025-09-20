@@ -3,8 +3,10 @@
   
   # ChainMind - Decentralized AI Compute Marketplace
   
-  ![ChainMind Banner](https://img.shields.io/badge/ChainMind-Decentralized%20AI-blue?style=for-the-badge&logo=ethereum)
+  [![Live Demo](https://img.shields.io/badge/🚀%20Live%20Demo-Visit%20Now-brightgreen?style=for-the-badge)](https://chainmind.up.railway.app/)
+  
   [![Built on Polygon](https://img.shields.io/badge/Built%20on-Polygon-8247E5?style=for-the-badge&logo=polygon)](https://polygon.technology/)
+  
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
   [![Node.js](https://img.shields.io/badge/Node.js-18%2B-green.svg)](https://nodejs.org/)
   [![TypeScript](https://img.shields.io/badge/TypeScript-5%2B-blue.svg)](https://www.typescriptlang.org/)
@@ -380,10 +382,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🔗 Links
 
-- **Website**: [chainmind.ai](https://chainmind.ai)
-- **Documentation**: [docs.chainmind.ai](https://docs.chainmind.ai)
-- **Discord**: [Join our community](https://discord.gg/chainmind)
-- **Twitter**: [@ChainMindAI](https://twitter.com/ChainMindAI)
+- **Website**: [chainmind.ai](https://chainmind.up.railway.app/)
+- **Documentation**: [docs.chainmind](https://)
+- **Discord**: [Join our community](https://discord.gg/)
+- **Twitter**: [@ChainMindAI](https://twitter.com/)
 
 ---
 
