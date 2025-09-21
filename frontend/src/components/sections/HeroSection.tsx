@@ -106,7 +106,10 @@ export default function HeroSection() {
     setIsLoading(true)
     try {
       // Check if backend is available
-      const response = await fetch('http://localhost:5000/health')
+      //const response = await fetch('http://localhost:5000/health')
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api/v1'
+      const baseUrl = apiUrl.replace('/api/v1', '')
+      const response = await fetch(`${baseUrl}/health`)
       if (response.ok) {
         // Navigate to job creation page
         router.push('/jobs/create')
@@ -140,7 +143,10 @@ export default function HeroSection() {
     setIsLoading(true)
     try {
       // Check if backend is available
-      const response = await fetch('http://localhost:5000/health')
+      //const response = await fetch('http://localhost:5000/health')
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api/v1'
+      const baseUrl = apiUrl.replace('/api/v1', '')
+      const response = await fetch(`${baseUrl}/health`)
       if (response.ok) {
         // Navigate to provider registration page
         router.push('/providers/register')
